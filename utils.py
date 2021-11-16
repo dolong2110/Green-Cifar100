@@ -11,7 +11,13 @@ from torch.utils.data import DataLoader
 
 
 def get_network(args):
-    if args.net == 'resnet34':
+    """ return given network
+    """
+
+    if args.net == 'resnet18':
+        from models.resnet import resnet18
+        net = resnet18()
+    elif args.net == 'resnet34':
         from models.resnet import resnet34
         net = resnet34()
     elif args.net == 'resnet50':
@@ -20,9 +26,15 @@ def get_network(args):
     elif args.net == 'resnet101':
         from models.resnet import resnet101
         net = resnet101()
+    elif args.net == 'resnet152':
+        from models.resnet import resnet152
+        net = resnet152()
     elif args.net == 'mobilenet':
         from models.mobilenet import mobilenet
         net = mobilenet()
+    elif args.net == 'linear_regression':
+        from models.mobilenet import linear_regression
+        net = linear_regression()
     else:
         print('the network name you have entered is not supported yet')
         sys.exit()
@@ -53,7 +65,7 @@ def get_training_dataloader(mean, std, batch_size=16, num_workers=2, shuffle=Tru
         transforms.ToTensor(),
         transforms.Normalize(mean, std)
     ])
-    # cifar100_training = CIFAR100Train(path, transform=transform_train)
+    # cifar100_training = CIFAR100(path, "train", transform=transform_train)
     cifar100_training = torchvision.datasets.CIFAR100(root='./data', train=True, download=True,
                                                       transform=transform_train)
     cifar100_training_loader = DataLoader(
@@ -77,7 +89,7 @@ def get_test_dataloader(mean, std, batch_size=16, num_workers=2, shuffle=True):
         transforms.ToTensor(),
         transforms.Normalize(mean, std)
     ])
-    #cifar100_test = CIFAR100Test(path, transform=transform_test)
+    # cifar100_test = CIFAR100(path, "test", transform=transform_test)
     cifar100_test = torchvision.datasets.CIFAR100(root='./data', train=False, download=True, transform=transform_test)
     cifar100_test_loader = DataLoader(
         cifar100_test, shuffle=shuffle, num_workers=num_workers, batch_size=batch_size)
@@ -154,7 +166,7 @@ def most_recent_weights(weights_folder):
 def last_epoch(weights_folder):
     weight_file = most_recent_weights(weights_folder)
     if not weight_file:
-       raise Exception('no recent weights were found')
+        raise Exception('no recent weights were found')
     resume_epoch = int(weight_file.split('-')[1])
 
     return resume_epoch
