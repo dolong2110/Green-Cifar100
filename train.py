@@ -114,7 +114,7 @@ if __name__ == '__main__':
 
     net = get_network(args)
 
-    #data preprocessing:
+    # data preprocessing:
     cifar100_training_loader = get_training_dataloader(
         settings.CIFAR100_TRAIN_MEAN,
         settings.CIFAR100_TRAIN_STD,

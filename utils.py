@@ -33,7 +33,7 @@ def get_network(args):
         from models.mobilenet import mobilenet
         net = mobilenet()
     elif args.net == 'linear_regression':
-        from models.mobilenet import linear_regression
+        from models.linear_regression import linear_regression
         net = linear_regression()
     else:
         print('the network name you have entered is not supported yet')
